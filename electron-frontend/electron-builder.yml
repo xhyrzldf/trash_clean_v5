@@ -1,0 +1,57 @@
+appId: com.systemclean.app
+productName: SystemClean
+directories:
+  output: dist
+  buildResources: src/icons
+
+files:
+  - src/**/*
+  - main.js
+  - package.json
+  - '!**/*.map'
+  - '!**/*.md'
+
+extraResources:
+  - from: src/assets
+    to: assets
+    filter:
+      - '**/*'
+
+linux:
+  target: 
+    - dir
+    - deb
+  icon: src/icons/app_icon.png
+  category: System
+  executableName: systemclean
+  maintainer: Your Name <your.email@example.com>
+  vendor: Your Company
+  synopsis: System Clean Utility
+  desktop:
+    Name: System Clean
+    Comment: System Clean Utility
+    Categories: System;Utility;
+    Terminal: false
+    Type: Application
+    Icon: system-clean
+
+electronVersion: 33.2.1
+
+publish: null
+
+asar: true
+
+compression: normal
+
+npmRebuild: true
+
+artifactName: '${productName}-${version}.${ext}'
+
+afterPack: build/afterPack.js
+
+extraMetadata:
+  main: main.js
+
+directories:
+  output: dist
+  buildResources: build

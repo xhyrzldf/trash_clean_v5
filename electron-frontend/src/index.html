@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self' http: https:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:;">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>系统清理工具</title>
+    <!-- 引入Bootstrap CSS -->
+    <link href="./assets/bootstraps/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 自定义样式文件 -->
+    <link rel="stylesheet" href="./styles.css"/>
+</head>
+
+<body>
+<div class="d-flex">
+    <!-- 左侧导航栏 -->
+    <nav class="sidebar">
+        <!-- 顶部标题 -->
+        <div class="sidebar-header">
+            <div class="app-icon">
+                <img src="./icons/app_icon.png" alt="应用图标" class="app-icon-img">
+            </div>
+            <h4 class="sidebar-title">系统清理小工具</h4>
+        </div>
+        <ul class="sidebar-menu">
+            <!-- 新增：首页 -->
+            <li class="sidebar-item" data-action="home">
+                <a href="#">
+                    <img src="./assets/icons/home_icon.png" alt="首页图标" class="sidebar-icon">
+                    <span class="sidebar-text">首页</span>
+                </a>
+            </li>
+            <!-- 垃圾清理 -->
+            <li class="sidebar-item" data-action="clean">
+                <a href="#">
+                    <img src="./assets/icons/clean_icon.png" alt="垃圾清理图标" class="sidebar-icon">
+                    <span class="sidebar-text">垃圾清理</span>
+                </a>
+            </li>
+            <!-- 内存加速 -->
+            <li class="sidebar-item" data-action="memory">
+                <a href="#">
+                    <img src="./assets/icons/memory_icon.png" alt="内存加速图标" class="sidebar-icon">
+                    <span class="sidebar-text">内存加速</span>
+                </a>
+            </li>
+            <!-- 大文件检索 -->
+            <li class="sidebar-item" data-action="bigfiles">
+                <a href="#">
+                    <img src="./assets/icons/bigfile_icon.png" alt="大文件检索图标" class="sidebar-icon">
+                    <span class="sidebar-text">大文件检索</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="window-controls">
+        <!-- 最小化按钮 -->
+        <button id="minimizeBtn" class="window-btn">—</button>
+        <!-- 关闭按钮 -->
+        <button id="closeBtn" class="window-btn">×</button>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content flex-grow-1">
+        <!-- 新增：首页界面 -->
+        <div id="homePage" style="display: none;">
+            <div class="home-top">
+                <!-- 左侧：大圆形分数 -->
+                <div class="score-container" id="homeScoreContainer">
+                    <!-- 旋转/水位球 -->
+                    <div class="score-circle" id="homeScoreCircle">
+                        <div class="water-layer" id="homeWaterLayer"></div>
+                    </div>
+                    <!-- 静止文字 -->
+                    <div class="score-text" id="homeScoreText">100分</div>
+                </div>
+                <!-- 右侧：系统信息 -->
+                <div class="system-info">
+                    <div class="info-line">上次清理时间: 4天前</div>
+                    <div class="info-line">累计清理大小: 43.8GB</div>
+                </div>
+            </div>
+            <!-- 新增: 全面清理扫描进度条容器 -->
+            <div id="homeFullCleanProgress" style="display: none; margin: 1rem auto; width: 400px;">
+                <div class="card p-3">
+                    <h5>正在扫描...</h5>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-info progress-animate" id="homeFullCleanProgressBar"
+                             role="progressbar" style="width: 0%;"
+                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                    <!-- 扫描状态提示 -->
+                    <p class="mt-2" id="homeFullCleanStatus" style="font-size:14px; color:#555;">等待扫描...</p>
+                </div>
+            </div>
+            <!-- 底部：三个功能模块 -->
+            <div class="home-bottom">
+                <div class="feature-module home-action-btn" data-target="clean">
+                    <img src="./assets/icons/clean_icon.png" alt="垃圾清理图标">
+                    <div class="module-text">
+                        垃圾清理<br>
+                        <span>释放磁盘空间</span>
+                    </div>
+                </div>
+                <div class="feature-module home-action-btn" data-target="memory">
+                    <img src="./assets/icons/memory_icon.png" alt="内存加速图标">
+                    <div class="module-text">
+                        内存加速<br>
+                        <span>提升系统流畅</span>
+                    </div>
+                </div>
+                <div class="feature-module home-action-btn" data-target="bigfiles">
+                    <img src="./assets/icons/bigfile_icon.png" alt="大文件检索图标">
+                    <div class="module-text">
+                        大文件检索<br>
+                        <span>精准删除臃肿</span>
+                    </div>
+                </div>
+            </div>
+            <!-- 全面清理按钮放在最底部居中 -->
+            <div class="home-action-btn-wrapper">
+                <button id="fullCleanBtn" class="btn btn-primary full-clean-btn">全面清理</button>
+            </div>
+        </div>
+
+        <!-- 新增：全面清理界面 -->
+        <div id="homeCleanPage" style="display: none;">
+
+            <!-- 头部：圆形评分及标题 -->
+            <div class="home-clean-header text-center" style="margin-top: 2rem;">
+                <!-- 全面清理页评分球：把原先 .liquid-ball 改为 .score-circle -->
+                <div class="score-container" id="cleanScoreContainer">
+                    <div class="score-circle" id="cleanScoreCircle">
+                        <div class="water-layer" id="cleanWaterLayer"></div>
+                    </div>
+                    <div class="score-text" id="cleanScoreText">90分</div>
+                </div>
+            </div>
+
+            <!-- 中间区域：各功能卡片（内容保持原样，可根据需求调整间距） -->
+            <div class="home-clean-cards row row-cols-1 row-cols-md-3 g-4" style="margin-top: 0rem;">
+                <!-- 缓存文件卡片 -->
+                <div class="col">
+                    <div class="card item-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="./assets/icons/cache_icon.png" alt="缓存文件图标" class="card-icon me-3">
+                                <h5 class="card-title mb-0">缓存文件</h5>
+                            </div>
+                            <p class="card-text text-muted" id="homeCacheDesc">用户和系统缓存</p>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <span class="size-info" id="homeCacheSize">0 GB</span>
+                                <button class="btn btn-outline-primary btn-sm" data-detail="cache_files">详情</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 日志文件卡片 -->
+                <div class="col">
+                    <div class="card item-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="./assets/icons/log_icon.png" alt="日志文件图标" class="card-icon me-3">
+                                <h5 class="card-title mb-0">日志文件</h5>
+                            </div>
+                            <p class="card-text text-muted" id="homeLogDesc">系统日志文件</p>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <span class="size-info" id="homeLogSize">0 GB</span>
+                                <button class="btn btn-outline-primary btn-sm" data-detail="log_files">详情</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 临时文件卡片 -->
+                <div class="col">
+                    <div class="card item-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="./assets/icons/temp_icon.png" alt="临时文件图标" class="card-icon me-3">
+                                <h5 class="card-title mb-0">临时文件</h5>
+                            </div>
+                            <p class="card-text text-muted" id="homeTempDesc">系统临时文件</p>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <span class="size-info" id="homeTempSize">0 GB</span>
+                                <button class="btn btn-outline-primary btn-sm" data-detail="temp_files">详情</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 应用文件卡片 -->
+                <div class="col">
+                    <div class="card item-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="./assets/icons/other_icon.png" alt="应用文件图标" class="card-icon me-3">
+                                <h5 class="card-title mb-0">应用文件</h5>
+                            </div>
+                            <p class="card-text text-muted" id="homeAppDesc">各种应用垃圾文件</p>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <span class="size-info" id="homeAppSize">0 GB</span>
+                                <button class="btn btn-outline-primary btn-sm" data-detail="app_files">详情</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 内存加速卡片 -->
+                <div class="col">
+                    <div class="card item-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="./assets/icons/memory_icon.png" alt="内存加速图标" class="card-icon me-3">
+                                <h5 class="card-title mb-0">内存加速</h5>
+                            </div>
+                            <p class="card-text text-muted" id="homeMemoryDesc">优化系统内存</p>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <span class="size-info" id="homeMemoryScore">0 分</span>
+                                <!--                                <button class="btn btn-outline-primary btn-sm" data-target="memory">进入</button>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 大文件检索卡片 -->
+                <div class="col">
+                    <div class="card item-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="./assets/icons/bigfile_icon.png" alt="大文件检索图标" class="card-icon me-3">
+                                <h5 class="card-title mb-0">大文件检索</h5>
+                            </div>
+                            <p class="card-text text-muted" id="homeBigfilesDesc">查找体积较大的文件</p>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <span class="size-info" id="homeBigfilesInfo">0 个</span>
+                                <!-- 修改前：data-target="bigfiles" 改为 data-detail="bigfiles" -->
+                                <button class="btn btn-outline-primary btn-sm" data-detail="bigfiles">详情</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部 -->
+            <div class="text-center" style="margin-top: 1rem;">
+                <!-- 主按钮，蓝底 -->
+                <button class="btn btn-primary me-3" id="cleanAllBtn" style="padding: 0.8rem 2rem; font-size: 1.2rem;">
+                    清理所有
+                </button>
+
+                <!-- 边框按钮，略小间距 -->
+                <button class="btn btn-outline-primary" id="reScanBtn" style="font-size: 1.2rem;">
+                    重新扫描
+                </button>
+            </div>
+        </div>
+
+        <!-- 垃圾清理界面（默认显示） -->
+        <div id="cleanPage">
+            <!-- 顶部显示区 -->
+            <div class="top-section d-flex justify-content-between align-items-center" id="cleanTopSection">
+                <div class="d-flex align-items-center gap-3">
+                    <!-- 主盾牌图片 -->
+                    <div class="shield-icon">
+                        <img src="./assets/images/main_shield.png" alt="主盾牌图标" class="main-shield-img">
+                    </div>
+                    <div class="total-size-info">
+                        <span class="total-size" id="totalSize">0 GB</span>
+                        <span class="ms-2 text-secondary">系统垃圾文件</span>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-primary" id="restartScanBtn">扫描垃圾</button>
+                </div>
+            </div>
+
+            <!-- 扫描进度展示：默认隐藏，点击“重新开始”后显示 -->
+            <div id="cleanScanProgress" class="card p-3 my-3" style="display: none;">
+                <h5>正在扫描...</h5>
+                <p>当前扫描：<span id="cleanCurrentPath">无</span></p>
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar progress-animate" id="cleanProgressBar" role="progressbar"
+                         style="width: 0%;"
+                         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 垃圾清理卡片容器区域 -->
+            <div class="cards-container mt-4 row row-cols-1 row-cols-md-2 g-4" id="cardsContainer">
+                <!-- 缓存文件卡片 -->
+                <div class="col">
+                    <div class="card item-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="./assets/icons/cache_icon.png" alt="缓存文件图标" class="card-icon me-3">
+                                <h5 class="card-title mb-0">缓存文件</h5>
+                            </div>
+                            <p class="card-text text-muted">用户和系统的缓存文件</p>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <span class="size-info" id="cacheSizeInfo">0 GB</span>
+                                <!-- 点击“检查”后跳转到对应详情页 -->
+                                <button class="btn btn-outline-primary btn-sm detail-check-btn" data-item="cache_files">
+                                    检查
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 日志文件卡片 -->
+                <div class="col">
+                    <div class="card item-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="./assets/icons/log_icon.png" alt="日志文件图标" class="card-icon me-3">
+                                <h5 class="card-title mb-0">日志文件</h5>
+                            </div>
+                            <p class="card-text text-muted">系统日志文件可能变得很大</p>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <span class="size-info" id="logSizeInfo">0 GB</span>
+                                <button class="btn btn-outline-primary btn-sm detail-check-btn" data-item="log_files">
+                                    检查
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 临时文件卡片 -->
+                <div class="col">
+                    <div class="card item-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="./assets/icons/temp_icon.png" alt="临时文件图标" class="card-icon me-3">
+                                <h5 class="card-title mb-0">临时文件</h5>
+                            </div>
+                            <p class="card-text text-muted">临时文件目录内容</p>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <span class="size-info" id="tempSizeInfo">0 GB</span>
+                                <button class="btn btn-outline-primary btn-sm detail-check-btn" data-item="temp_files">
+                                    检查
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 应用文件卡片 -->
+                <div class="col">
+                    <div class="card item-card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="./assets/icons/other_icon.png" alt="应用文件图标" class="card-icon me-3">
+                                <h5 class="card-title mb-0">应用文件</h5>
+                            </div>
+                            <p class="card-text text-muted">针对常见应用的垃圾文件</p>
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <span class="size-info" id="appSizeInfo">0 GB</span>
+                                <button class="btn btn-outline-primary btn-sm detail-check-btn" data-item="app_files">
+                                    检查
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div> <!-- cleanPage end -->
+
+        <!-- 详情界面 -->
+        <div id="cleanDetailPage" style="display: none;">
+            <!-- 顶部：返回 + 标题 + 搜索 -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-secondary me-3" id="detailBackBtn">返回</button>
+                    <h3 id="detailTitle" class="mb-0">详情</h3>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <input type="text" id="detailSearchInput" class="form-control form-control-sm"
+                           placeholder="搜索文件或路径">
+                    <button class="btn btn-sm btn-outline-primary" id="detailSearchBtn">搜索</button>
+                </div>
+            </div>
+
+            <!-- Tabs 导航 -->
+            <ul class="nav nav-tabs" id="detailCategoryTabs"></ul>
+
+            <!-- 表格与底部操作 -->
+            <div class="table-wrapper" style="display: flex; flex-direction: column; height: 600px;">
+                <div class="card flex-grow-1" style="overflow: hidden;">
+                    <div class="card-body p-3 d-flex flex-column" style="height: 100%;">
+                        <h5 class="card-title" id="detailCategoryTitle"></h5>
+                        <!-- 让中间容器滚动 -->
+                        <div class="flex-grow-1 overflow-auto" style="min-height: 0;">
+                            <table class="table table-hover align-middle detail-table" id="detailFileTable">
+                                <thead>
+                                <tr id="detailTableHead"></tr>
+                                </thead>
+                                <tbody id="detailTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 底部操作栏：始终可见，无需滚动就能点删除 -->
+                <div class="d-flex justify-content-between align-items-center mt-2 p-2"
+                     style="background: #fff; border-top: 1px solid #ddd;">
+                    <div id="detailSelectedInfo" class="ms-2 text-secondary"></div>
+                    <button class="btn btn-danger me-2" id="deleteSelectedBtn">删除</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 新增：进程管理页面(模仿详情页) -->
+        <div id="processDetailPage" style="display: none;">
+            <!-- 顶部：返回 + 标题 + 搜索框(右上角) -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-secondary me-3" id="processDetailBackBtn">返回</button>
+                    <h3 id="processDetailTitle" class="mb-0">进程列表</h3>
+                </div>
+                <!-- 在 processDetailPage 中加一个刷新频率设置 -->
+                <div class="d-flex align-items-center mb-2" style="gap:1rem;">
+                    <label for="processRefreshRange" class="mb-0">刷新间隔(秒)：</label>
+                    <input type="range" id="processRefreshRange" min="1" max="10" value="5" style="width:120px;"/>
+                    <span id="processRefreshValue">5s</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <input type="text" id="processSearchInput" class="form-control form-control-sm"
+                           placeholder="搜索进程或PID">
+                    <button class="btn btn-sm btn-outline-primary" id="processSearchBtn">搜索</button>
+                </div>
+            </div>
+
+            <!-- 中间表格容器 + 底部操作栏 -->
+            <div class="table-wrapper" style="display: flex; flex-direction: column; height: 600px;">
+                <div class="card flex-grow-1" style="overflow: hidden;">
+                    <div class="card-body p-3 d-flex flex-column" style="height: 100%;">
+                        <h5 class="card-title" id="processListSubtitle"></h5>
+                        <!-- 中间容器可滚动 -->
+                        <div class="flex-grow-1 overflow-auto" style="min-height: 0;">
+                            <table class="table table-hover align-middle detail-table" id="processTable">
+                                <thead>
+                                <tr id="processTableHead">
+                                    <!-- 动态生成: 复选框, PID, 名称, 内存, 内存占比, 用户, 命令行, 操作 -->
+                                </tr>
+                                </thead>
+                                <tbody id="processTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- 底部操作栏：可选，如果需要批量杀进程 -->
+                <div class="d-flex justify-content-between align-items-center mt-2 p-2"
+                     style="background: #fff; border-top: 1px solid #ddd;">
+                    <div id="processSelectedInfo" class="ms-2 text-secondary"></div>
+                    <button class="btn btn-danger me-2" id="killSelectedBtn">结束进程</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 内存加速界面（默认隐藏，通过JS控制显示） -->
+        <div id="memoryAccelerationPage" class="memory-acceleration-page" style="display: none;">
+            <!-- 顶部说明区域 -->
+            <div class="memory-header d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="memory-title">性能</h2>
+                    <p class="memory-subtitle">采用为您精挑细选的建议或手动运行性能任务。</p>
+                </div>
+                <button class="btn btn-primary" id="viewProcessBtn">查看进程列表</button>
+            </div>
+
+            <!-- CPU 折线图卡片 -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card chart-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">CPU</h5>
+                                <div class="cpu-usage-legend d-flex gap-3">
+                    <span class="legend-item">
+                      <span class="legend-color user-color"></span>用户
+                      <span class="cpu-percent" id="cpuUserPercent">0%</span>
+                    </span>
+                                    <span class="legend-item">
+                      <span class="legend-color system-color"></span>系统
+                      <span class="cpu-percent" id="cpuSystemPercent">0%</span>
+                    </span>
+                                    <span class="legend-item">
+                      <span class="legend-color idle-color"></span>空闲
+                      <span class="cpu-percent" id="cpuIdlePercent">0%</span>
+                    </span>
+                                </div>
+                            </div>
+                            <!-- 移除 width/height -->
+                            <canvas id="cpuChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 四个简要卡片：压力、内存、网络、磁盘 -->
+            <div class="row mb-4">
+                <!-- 压力卡片 -->
+                <div class="col-12 col-md-3">
+                    <div class="card info-card">
+                        <div class="card-body d-flex flex-column align-items-center">
+                            <h6>压力</h6>
+                            <canvas id="pressureChart" width="80" height="80"></canvas>
+                            <span class="pressure-percent mt-2" id="pressurePercent">0%</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 内存卡片 -->
+                <div class="col-12 col-md-3">
+                    <div class="card info-card">
+                        <div class="card-body d-flex flex-column align-items-center">
+                            <h6>内存</h6>
+                            <p class="memory-size mb-1">
+                                <span id="usedMemory">0GB</span> / <span id="totalMemory">0GB</span>
+                            </p>
+                            <div class="progress w-75">
+                                <div class="progress-bar bg-success" id="memoryProgress" role="progressbar"
+                                     style="width: 0%;"
+                                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 网络卡片 -->
+                <div class="col-12 col-md-3">
+                    <div class="card info-card">
+                        <div class="card-body d-flex flex-column align-items-center">
+                            <h6>网络</h6>
+                            <canvas id="networkChart" width="80" height="80"></canvas>
+                            <div class="network-traffic mt-2">
+                                <div>上行 <span id="uploadSpeed">0GB</span></div>
+                                <div>下行 <span id="downloadSpeed">0GB</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 磁盘卡片 -->
+                <div class="col-12 col-md-3">
+                    <div class="card info-card">
+                        <div class="card-body d-flex flex-column align-items-center">
+                            <h6>磁盘</h6>
+                            <canvas id="diskChart" width="80" height="80"></canvas>
+                            <div class="disk-io mt-2">
+                                <div>读 <span id="diskRead">0GB</span></div>
+                                <div>写 <span id="diskWrite">0GB</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 一键优化按钮 -->
+            <div class="text-center">
+                <button class="btn btn-primary" id="optimizeBtn">
+                    <span id="optimizeSpinner" class="spinner" style="display: none;"></span>
+                    <span id="optimizeBtnText">一键优化内存</span>
+                </button>
+
+            </div>
+        </div>
+
+        <!-- 大文件检索界面（默认隐藏，通过JS控制显示） -->
+        <div id="bigfilesPage" class="bigfiles-page" style="display: none;">
+            <!-- 顶部提示区域：状态+路径 -->
+            <div class="bigfiles-top d-flex align-items-center mb-4">
+                <div class="bigfiles-icon">
+                    <img src="./assets/icons/bigfile_icon.png" alt="大文件扫描图标"/>
+                </div>
+                <div class="bigfiles-info ms-3">
+                    <h3 id="bigfilesTitle" class="mb-1">正在扫描大文件...</h3>
+                    <!-- 当前扫描路径 -->
+                    <div id="currentScanningPath" class="bigfiles-path text-muted"></div>
+                </div>
+            </div>
+
+            <!-- 重新扫描按钮 -->
+            <div class="mb-4">
+                <button class="btn btn-primary" id="startBigfilesScanBtn">重新扫描</button>
+            </div>
+
+            <!-- 大文件扫描进度区域 -->
+            <div class="bigfiles-stats card p-4 mb-4" id="bigfilesProgressSection">
+                <div class="bigfiles-progress-bar mb-3">
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-info progress-animate" id="bigfilesProgressBar" role="progressbar"
+                             style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-around text-center">
+                    <div>
+                        <div class="stat-title">已扫描目录</div>
+                        <div class="stat-value" id="scannedDirs">0</div>
+                    </div>
+                    <div>
+                        <div class="stat-title">已扫描文件</div>
+                        <div class="stat-value" id="scannedFiles">0</div>
+                    </div>
+                    <div>
+                        <div class="stat-title">找到大文件</div>
+                        <div class="stat-value" id="foundBigFiles">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 扫描完成提示信息 -->
+            <div id="scanCompleteMsg" class="text-center" style="display: none;">
+                <h4>扫描完成</h4>
+                <p class="text-muted mb-3" id="scanCompleteInfo">耗时0秒，共找到0个大文件</p>
+                <button class="btn btn-primary" id="checkBigFilesBtn">查看文件列表</button>
+            </div>
+        </div>
+
+        <!-- 大文件详情界面 -->
+        <div id="bigfilesDetailPage" style="display: none;">
+            <!-- 顶部：返回 + 标题 + 搜索 -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-secondary me-3" id="bigfilesDetailBackBtn">返回</button>
+                    <h3 id="bigfilesDetailTitle" class="mb-0">大文件详情</h3>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <input type="text" id="bigfilesDetailSearchInput" class="form-control form-control-sm"
+                           placeholder="搜索文件或路径">
+                    <button class="btn btn-sm btn-outline-primary" id="bigfilesDetailSearchBtn">搜索</button>
+                </div>
+            </div>
+
+            <!-- 表格与底部操作 -->
+            <div class="table-wrapper" style="display: flex; flex-direction: column; height: 600px;">
+                <div class="card flex-grow-1" style="overflow: hidden;">
+                    <div class="card-body p-3 d-flex flex-column" style="height: 100%;">
+                        <h5 class="card-title" id="bigfilesDetailCategoryTitle"></h5>
+                        <!-- 让中间容器滚动 -->
+                        <div class="flex-grow-1 overflow-auto" style="min-height: 0;">
+                            <table class="table table-hover align-middle detail-table" id="bigfilesDetailFileTable">
+                                <thead>
+                                <tr id="bigfilesDetailTableHead"></tr>
+                                </thead>
+                                <tbody id="bigfilesDetailTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 底部操作栏：始终可见，无需滚动就能点删除 -->
+                <div class="d-flex justify-content-between align-items-center mt-2 p-2"
+                     style="background: #fff; border-top: 1px solid #ddd;">
+                    <div id="bigfilesDetailSelectedInfo" class="ms-2 text-secondary"></div>
+                    <button class="btn btn-danger me-2" id="bigfilesDeleteSelectedBtn">删除</button>
+                </div>
+            </div>
+        </div>
+        <!-- 外层遮罩 (class名改成 custom-modal-overlay) -->
+        <div class="custom-modal-overlay" id="myModal" style="display: none;">
+            <div class="custom-modal">
+                <button class="custom-modal-close" onclick="closeModal()">×</button>
+                <div class="custom-modal-header">提示</div>
+                <div class="custom-modal-body">这里是弹窗内容...</div>
+                <div class="custom-modal-footer">
+                    <button class="custom-modal-button" onclick="confirmModal()">确定</button>
+                    <button class="custom-modal-button" onclick="closeModal()">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap JS -->
+<script src="./assets/bootstrap.bundle.min.js"></script>
+<!-- 引入 Chart.js (用于展示折线图、环形图) -->
+<script src="./assets/chart.umd.min.js"></script>
+<!-- 自定义逻辑JS -->
+<script src="./renderer.js"></script>
+</body>
+
+</html>

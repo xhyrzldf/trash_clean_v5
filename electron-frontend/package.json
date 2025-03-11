@@ -1,0 +1,58 @@
+{
+  "name": "trash-clean-gui",
+  "version": "1.0.0",
+  "homepage": "https://your-website-or-github-page.com",
+  "description": "A system cleaning and optimization utility",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder build",
+    "pack": "electron-builder --dir"
+  },
+  "keywords": [
+    "system",
+    "clean",
+    "utility"
+  ],
+  "author": {
+    "name": "Your Name",
+    "email": "your.email@example.com"
+  },
+  "license": "ISC",
+
+  "dependencies": {
+    "axios": "^1.7.9"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^24.9.1"
+  },
+
+  "build": {
+    "asar": true, 
+    "appId": "com.systemclean.app",
+    "productName": "SystemClean",
+    "directories": {
+      "output": "dist"
+    },
+
+    "files": [
+      "src/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "linux": {
+      "target": "deb",
+      "icon": "src/icons/app_icon.png",
+      "category": "System",
+      "executableName": "systemclean",
+      "desktop": {
+        "Name": "System Clean",
+        "Comment": "System Clean Utility",
+        "Categories": "System;Utility;",
+        "Terminal": "false"
+      }
+    }
+
+  }
+}

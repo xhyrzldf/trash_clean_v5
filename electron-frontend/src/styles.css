@@ -1,0 +1,861 @@
+/* ---------------------------
+   全局样式
+--------------------------- */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #ecf3fb;
+    color: #333;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 220px;
+    background: linear-gradient(to bottom, #b4d4f5 0%, #cce2ff 100%);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 1rem;
+    box-sizing: border-box;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem 0.5rem 1.5rem;
+    gap: 0.5rem;
+}
+
+.app-icon {
+    width: 28px;
+    height: 28px;
+}
+
+.app-icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.sidebar-title {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+    font-weight: 600;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0 0;
+    width: 100%;
+}
+
+.sidebar-item {
+    width: 100%;
+    position: relative;
+}
+
+.sidebar-item a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #4e5d6b;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+}
+
+.sidebar-item a:hover {
+    background-color: #d4e9fd;
+    color: #2b5788;
+}
+
+.sidebar-item.active a {
+    background-color: #d4e9fd;
+    color: #2b5788;
+}
+
+.sidebar-item.active a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    right: 20px;
+    height: 3px;
+    background-color: #3a9ff0;
+    border-radius: 2px;
+}
+
+.sidebar-icon {
+    width: 28px;
+    height: 28px;
+    margin-right: 15px;
+    object-fit: contain;
+}
+
+.sidebar-text {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* ---------------------------
+   主内容区样式
+--------------------------- */
+.main-content {
+    margin-left: 220px;
+    padding: 2rem;
+    background: #ffffff;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* ---------------------------
+   顶部区域样式（仅用于“垃圾清理”）
+--------------------------- */
+.top-section {
+    padding-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.shield-icon {
+    width: 80px;
+    height: 80px;
+}
+
+.main-shield-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.total-size-info {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.total-size {
+    font-weight: bold;
+    color: #3a9ff0;
+    font-size: 48px;
+    line-height: 1;
+}
+
+.text-secondary {
+    font-size: 20px;
+    color: #5f6d7e;
+}
+
+.btn-primary {
+    background: #3a9ff0;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-primary:hover {
+    background: #3592dd;
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    background: #2a78c9;
+}
+
+.btn-outline-primary {
+    color: #3a9ff0;
+    border-color: #3a9ff0;
+    border-radius: 8px;
+    padding: 0.4rem 1rem;
+    font-size: 14px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-outline-primary:hover {
+    background: #3a9ff0;
+    color: #ffffff;
+}
+
+.btn-outline-primary:active {
+    background: #3592dd;
+    border-color: #3592dd;
+}
+
+/* ---------------------------
+   垃圾清理卡片区域
+--------------------------- */
+.cards-container {
+    margin-top: 2.5rem;
+}
+
+.item-card {
+    background: #ffffff;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.item-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.item-card .card-body {
+    padding: 2rem;
+}
+
+.card-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.card-text {
+    font-size: 14px;
+    color: #5f6d7e;
+    margin-top: 0.75rem;
+}
+
+.card-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.size-info {
+    font-weight: bold;
+    color: #3a9ff0;
+    font-size: 20px;
+}
+
+/* 让进度条更丝滑 */
+.progress-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+/* ---------------------------
+   响应式调整（示例）
+--------------------------- */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80px;
+        padding-top: 0.5rem;
+    }
+
+    .sidebar-header {
+        display: none;
+    }
+
+    .sidebar-item a {
+        padding: 12px;
+        justify-content: center;
+    }
+
+    .sidebar-item.active a::after {
+        left: 15px;
+        right: 15px;
+    }
+
+    .sidebar-text {
+        display: none;
+    }
+
+    .sidebar-icon {
+        margin-right: 0;
+    }
+
+    .main-content {
+        margin-left: 80px;
+        padding: 1.5rem;
+    }
+
+    .total-size {
+        font-size: 32px;
+    }
+
+    .text-secondary {
+        font-size: 16px;
+    }
+
+    .btn-primary {
+        padding: 0.5rem 1rem;
+        font-size: 14px;
+    }
+
+    .card-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .card-title {
+        font-size: 18px;
+    }
+
+    .size-info {
+        font-size: 18px;
+    }
+}
+
+/* ---------------------------
+   首页界面样式（根据原型图要求）
+--------------------------- */
+/* 让首页整体居中并控制宽度 */
+#homePage {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+/* 顶部：分数左、系统信息右 */
+.home-top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* 左右分布 */
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+/* 大圆形评分 */
+.progress-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #3a9ff0;
+    z-index: 1;
+}
+
+/* 系统信息 */
+.system-info {
+    font-size: 1rem;
+    color: #333;
+}
+
+.system-info .info-line {
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* 三个功能模块区域 */
+.home-bottom {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem; /* 与下面按钮留空 */
+}
+
+/* 每个模块卡片，浅灰背景、圆角 */
+.feature-module {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 1.5rem 1rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.feature-module img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0.5rem;
+}
+
+.feature-module .module-text {
+    font-size: 1rem;
+    color: #333;
+}
+
+.feature-module .module-text span {
+    display: block;
+    font-size: 0.9rem;
+    color: #5f6d7e;
+}
+
+/* 全面清理按钮：在最下方居中 */
+.home-action-btn-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+}
+
+.full-clean-btn {
+    background: #3a9ff0;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* ============================
+   详情页样式及其他
+=========================== */
+#cleanDetailPage .list-group-item {
+    cursor: pointer;
+}
+
+#cleanDetailPage .list-group-item.active {
+    background-color: #d4e9fd;
+    color: #2b5788;
+    font-weight: 600;
+}
+
+.detail-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.detail-table th,
+.detail-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.detail-table th:first-child,
+.detail-table td:first-child {
+    width: 40px;
+    max-width: 40px;
+    padding: 0.25rem;
+    text-align: center;
+}
+
+.detail-table th:nth-child(2),
+.detail-table td:nth-child(2) {
+    max-width: 160px;
+}
+
+.detail-table th:nth-child(3),
+.detail-table td:nth-child(3) {
+    max-width: 200px;
+}
+
+.detail-table th:nth-child(4),
+.detail-table td:nth-child(4) {
+    max-width: 100px;
+}
+
+.detail-table th:nth-child(5),
+.detail-table td:nth-child(5) {
+    max-width: 100px;
+}
+
+.detail-table th:nth-child(6),
+.detail-table td:nth-child(6) {
+    max-width: 100px;
+}
+
+detail-table th:nth-child(7),
+detail-table td:nth-child(7) {
+    max-width: 150px;
+}
+
+.detail-table td:hover {
+    background-color: #f7f9fb;
+    cursor: default;
+}
+
+.nav-tabs .nav-link {
+    cursor: pointer;
+}
+
+#detailSearchInput {
+    width: 200px;
+    font-size: 14px;
+}
+
+#detailSelectedInfo {
+    font-size: 14px;
+    color: #666;
+}
+
+#processDetailPage .table-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+}
+
+.btn.btn-outline-primary {
+    white-space: nowrap;
+}
+
+/* 让所有 info-card 的内容区至少有同样高度 */
+.info-card .card-body {
+    min-height: 300px;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3a9ff0;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.btn.btn-outline-secondary#detailBackBtn,
+.btn.btn-outline-secondary#bigfilesDetailBackBtn,
+.btn.btn-outline-secondary#processDetailBackBtn {
+    color: #3a9ff0 !important;
+    border-color: #3a9ff0 !important;
+}
+
+.btn.btn-outline-secondary#detailBackBtn:hover,
+.btn.btn-outline-secondary#bigfilesDetailBackBtn:hover,
+.btn.btn-outline-secondary#processDetailBackBtn:hover {
+    background-color: #3a9ff0 !important;
+    color: #fff !important;
+}
+
+#detailCategoryTabs .nav-link {
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#detailCategoryTabs .nav-link:hover {
+    background-color: #d4e9fd;
+    color: #2b5788;
+}
+
+#detailCategoryTabs .nav-link.active {
+    background-color: #3a9ff0;
+    color: #fff;
+}
+
+#detailTitle,
+#bigfilesDetailTitle,
+#processDetailTitle {
+    color: #2b5788;
+    font-weight: 700;
+}
+
+.detail-table thead th {
+    background-color: #d4e9fd;
+    color: #2b5788;
+    font-weight: 600;
+}
+
+.detail-table thead th:hover {
+    background-color: #cce2ff;
+}
+
+.window-controls {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    -webkit-app-region: no-drag;
+}
+
+.window-btn {
+    background-color: transparent;
+    border: none;
+    color: #3a9ff0;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.window-btn:hover {
+    background-color: #d4e9fd;
+    color: #2b5788;
+}
+
+.window-btn:active {
+    background-color: #cce2ff;
+}
+
+.chart-card .card-body {
+    padding: 1.5rem;
+    height: 250px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.system-info {
+    /* 比如改成 3rem，就会比之前的 2rem 更大一些距离 */
+    margin-left: 20rem;
+    transform: translateX(-15rem); /* 向左平移2rem，根据需要调整数值 */
+}
+
+.system-info .info-line {
+    font-size: 1.2rem; /* 调整文字大小 */
+    margin-bottom: 2rem; /* 增加两行文字间的垂直间距 */
+    line-height: 1.6; /* 如果需要整体行高更大，也可加上 */
+}
+
+/* 统一的评分球样式 */
+/* 父容器：控制整体大小，居中内容 */
+.score-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+/* 外圈圆形 */
+.score-circle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    /* 初始边框颜色，可在JS中根据分数动态修改 */
+    border: 4px solid #3a9ff0;
+    box-sizing: border-box;
+}
+
+/* 可选：旋转动画，给 .score-circle 添加 .spin 时触发 */
+.score-circle.spin {
+    animation: circleSpin 1.5s linear infinite;
+}
+
+@keyframes circleSpin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 水层：用 CSS 变量 --wave-bg 来控制渐变背景 */
+.water-layer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    /* 水位高度由 JS 设置成 score% */
+    height: 50%;
+    /* 下缘圆角，上缘平直 */
+    border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    /* 使用CSS变量存储背景渐变，初始默认蓝色系 */
+    --wave-bg: linear-gradient(to top, #3a9ff0, #cce2ff);
+    background: var(--wave-bg);
+    overflow: hidden;
+}
+
+/* 取消波浪效果，不显示 ::before */
+.water-layer::before {
+    content: none;
+}
+
+/* 分数文字：绝对定位在圆心 */
+.score-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #3a9ff0;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* -------------------------------
+   统一美化弹窗样式
+-------------------------------- */
+
+/* 弹窗遮罩层：全屏半透明背景，居中显示弹窗 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    z-index: 1000; /* 覆盖其他内容 */
+}
+
+/* 弹窗主体 */
+.modal {
+    background-color: #fff; /* 弹窗背景色 */
+    border-radius: 8px; /* 圆角边框 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* 细腻阴影 */
+    width: 90%; /* 自适应宽度 */
+    max-width: 500px; /* 最大宽度 */
+    padding: 20px; /* 内边距 */
+    position: relative; /* 方便绝对定位子元素 */
+    animation: modalFadeIn 0.3s ease-out; /* 弹窗淡入动画 */
+}
+
+/* 弹窗淡入动画 */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 外层遮罩层 */
+
+.custom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.custom-modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+}
+
+
+/* 淡入动画 */
+@keyframes customModalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 关闭按钮 */
+.custom-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.custom-modal-close:hover {
+    color: #666;
+}
+
+/* 头部 / 内容 / 底部 */
+.custom-modal-header {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.custom-modal-body {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.custom-modal-footer {
+    text-align: right;
+}
+
+/* 按钮 */
+.custom-modal-button {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #3a9ff0;
+    color: #fff;
+    transition: background-color 0.3s ease;
+    margin-left: 8px;
+}
+
+.custom-modal-button:hover {
+    background-color: #327fd3;
+}
+
+.loading-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* 调整loading-content中spinner的大小 */
+.loading-content .spinner {
+    width: 40px;
+    height: 40px;
+    border-width: 4px;
+    margin: 0 auto 1rem;
+}

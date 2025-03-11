@@ -1,0 +1,71 @@
+# 编译输出目录
+*.o
+*.so
+*.a
+*.bin
+*.exe
+*.out
+*.app
+*.dll
+*.dylib
+*.dist
+*.build
+backend.dist/
+dist/
+build/
+
+# Node模块和依赖
+node_modules/
+package-lock.json
+yarn.lock
+.yarn/
+.pnp/
+.npm/
+
+# 编译缓存
+__pycache__/
+*.py[cod]
+*$py.class
+.store/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.directory
+*~
+.fuse_hidden*
+.Trash-*
+
+# 临时文件
+*.log
+*.tmp
+logs/
+temp/
+tmp/
+.cache/
+
+# Electron打包文件
+electron-frontend/dist/
+electron-frontend/.store/
+local-electron/
+
+# 构建临时文件
+backend/backend.build/
+backend/*.build/
+*.deb
+compile/
+
+# 备份文件
+bak/
+bak2/
+*.bak
+*.backup
+
+# 其他不需要版本控制的文件
+*.swp
+*.swo
+.vscode/
+.idea/
+*.sublime-*
