@@ -69,3 +69,4 @@ bak2/
 .vscode/
 .idea/
 *.sublime-*
+nuitka-crash-report.xml
